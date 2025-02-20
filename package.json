@@ -8,7 +8,10 @@
 		"android": "expo start --android",
 		"ios": "expo start --ios",
 		"web": "expo start --web",
-		"lint": "expo lint"
+		"lint": "expo lint",
+		"prettier": "prettier --check .",
+		"prettier:fix": "prettier --write .",
+		"format:fix": "npm run lint:fix && npm run prettier:fix"
 	},
 	"dependencies": {
 		"@babel/core": "^7.25.2",
@@ -42,6 +45,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.25.2",
 		"@types/react-test-renderer": "^18.3.0",
+		"prettier": "^3.4.2",
 		"react-test-renderer": "18.3.1",
 		"typescript": "^5.3.3"
 	},
