@@ -21,6 +21,7 @@ export function HelloWave() {
 			),
 			4 // Run the animation 4 times
 		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const animatedStyle = useAnimatedStyle(() => ({

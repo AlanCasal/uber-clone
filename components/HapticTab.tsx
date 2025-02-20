@@ -1,4 +1,5 @@
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
 
