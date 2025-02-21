@@ -17,10 +17,10 @@ const Onboarding = () => {
 	};
 
 	return (
-		<SafeAreaView className='flex h-full items-center justify-between bg-white'>
+		<SafeAreaView className='flex h-full items-center justify-between bg-white p-5'>
 			<TouchableOpacity
 				onPress={() => router.replace('/(auth)/sign-up')}
-				className='w-full flex justify-end items-end p-5'
+				className='w-full flex justify-end items-end'
 			>
 				<Text className='text-black text-md font-JakartaBold'>Skip</Text>
 			</TouchableOpacity>
@@ -61,7 +61,7 @@ const Onboarding = () => {
 			<CustomButton
 				title={isLastSlide ? 'Get Started' : 'Next'}
 				onPress={handleNext}
-				className='w-11/12 mt-10'
+				className='mt-10'
 			/>
 		</SafeAreaView>
 	);
