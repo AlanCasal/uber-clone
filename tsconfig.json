@@ -10,13 +10,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@features/*": ["./features/*"],
-      "@components/*": ["./components/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@utils/*": ["./utils/*"],
-      "@constants/*": ["./constants/*"],
-      "@store/*": ["./store/*"],
-      "@assets/*": ["./assets/*"],
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -37,7 +30,8 @@
     "*.config.js",
     "nativewind-env.d.ts",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules"
