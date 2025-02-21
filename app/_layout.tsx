@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
 import { useFonts } from 'expo-font';
@@ -27,20 +28,23 @@ export default function RootLayout() {
 	if (!loaded) return null;
 
 	return (
-		<Stack>
-			<Stack.Screen
-				name='index'
-				options={{ headerShown: false }}
-			/>
-			<Stack.Screen
-				name='(auth)'
-				options={{ headerShown: false }}
-			/>
-			<Stack.Screen
-				name='(root)'
-				options={{ headerShown: false }}
-			/>
-			<Stack.Screen name='+not-found' />
-		</Stack>
+		<>
+			<Stack>
+				<Stack.Screen
+					name='index'
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='(auth)'
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name='(root)'
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen name='+not-found' />
+			</Stack>
+			<StatusBar style='dark' />
+		</>
 	);
 }
