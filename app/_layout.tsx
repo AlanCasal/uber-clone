@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
-
+import '@/global.css';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
