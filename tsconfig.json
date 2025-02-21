@@ -34,7 +34,10 @@
     "**/*.ts",
     "**/*.tsx",
     ".eslintrc.json",
-    "*.config.js"
+    "*.config.js",
+    "nativewind-env.d.ts",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ],
   "exclude": [
     "node_modules"
