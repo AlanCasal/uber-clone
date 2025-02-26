@@ -37,3 +37,4 @@ yarn-error.*
 
 app-example
 uber-clone.code-workspace
+.env
