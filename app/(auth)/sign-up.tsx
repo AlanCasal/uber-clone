@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
+import React, { useState } from 'react';
+import { Image, ScrollView, View, Text } from 'react-native';
+import { Link, router } from 'expo-router';
+import ReactNativeModal from 'react-native-modal';
+import { useSignUp } from '@clerk/clerk-expo';
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
 import OAuth from '@/components/OAuth';
 import { icons, images } from '@/constants';
-import { useSignUp } from '@clerk/clerk-expo';
-import { Link } from 'expo-router';
-import { useState } from 'react';
-import { Image, ScrollView, View, Text, Button, TextInput } from 'react-native';
 
 // Define the Clerk error type
 interface ClerkError extends Error {
@@ -26,7 +27,7 @@ const SignUp = () => {
 	});
 
 	const [verification, setVerification] = useState({
-		state: 'default',
+		state: 'pending',
 		error: '',
 		code: '',
 	});
@@ -62,13 +63,10 @@ const SignUp = () => {
 		if (!isLoaded) return;
 
 		try {
-			// Use the code the user provided to attempt verification
 			const signUpAttempt = await signUp.attemptEmailAddressVerification({
 				code: verification.code,
 			});
 
-			// If verification was completed, set the session to active
-			// and redirect the user
 			if (signUpAttempt.status === 'complete') {
 				// TODO: create user in db
 				await setActive({ session: signUpAttempt.createdSessionId });
@@ -94,22 +92,9 @@ const SignUp = () => {
 		}
 	};
 
-	if (pendingVerification) {
-		return (
-			<>
-				<Text>Verify your email</Text>
-				<TextInput
-					value={code}
-					placeholder='Enter your verification code'
-					onChangeText={code => setCode(code)}
-				/>
-				<Button
-					title='Verify'
-					onPress={onVerifyPress}
-				/>
-			</>
-		);
-	}
+	const handleBrowseHome = () => {
+		router.replace('/(root)/(tabs)/home');
+	};
 
 	return (
 		<ScrollView className='flex-1 bg-white'>
@@ -165,7 +150,28 @@ const SignUp = () => {
 					</Link>
 				</View>
 
-				{/* Verification Modal */}
+				<ReactNativeModal isVisible={verification.state === 'success'}>
+					<View className='bg-white px-7 py-9 rounded-2xl min-h-[300px]'>
+						<Image
+							source={images.check}
+							className='w-[110px] h-[110px] mx-auto my-5'
+						/>
+
+						<Text className='text-3xl text-center font-JakartaSemiBold'>
+							Verified
+						</Text>
+
+						<Text className='text-center text-base text-gray-400 font-Jakarta mt-2'>
+							You have successfully verified your account.
+						</Text>
+
+						<CustomButton
+							title='Browse Home'
+							className='mt-5'
+							onPress={handleBrowseHome}
+						/>
+					</View>
+				</ReactNativeModal>
 			</View>
 		</ScrollView>
 	);
