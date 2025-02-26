@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
-import { Image, ScrollView, View, Text } from 'react-native';
+import { Image, ScrollView, View, Text, Alert } from 'react-native';
 import { Link, router } from 'expo-router';
 import ReactNativeModal from 'react-native-modal';
 import { useSignUp } from '@clerk/clerk-expo';
@@ -9,7 +9,6 @@ import InputField from '@/components/InputField';
 import OAuth from '@/components/OAuth';
 import { icons, images } from '@/constants';
 
-// Define the Clerk error type
 interface ClerkError extends Error {
 	errors?: Array<{
 		longMessage: string;
@@ -17,6 +16,12 @@ interface ClerkError extends Error {
 		code?: string;
 	}>;
 }
+
+type Verification = {
+	state: 'default' | 'pending' | 'success' | 'failed';
+	error: string;
+	code: string;
+};
 
 const SignUp = () => {
 	const { isLoaded, signUp, setActive } = useSignUp();
@@ -26,39 +31,39 @@ const SignUp = () => {
 		password: '',
 	});
 
-	const [verification, setVerification] = useState({
-		state: 'pending',
+	const [verification, setVerification] = useState<Verification>({
+		state: 'default',
 		error: '',
 		code: '',
 	});
 
+	const [showSuccessModal, setShowSuccessModal] = useState(false);
+
 	const onSignUpPress = async () => {
 		if (!isLoaded) return;
 
-		// Start sign-up process using email and password provided
 		try {
 			await signUp.create({
 				emailAddress: form.email,
 				password: form.password,
 			});
 
-			// Send user an email with verification code
 			await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
 
-			// Set 'pendingVerification' to true to display second form
-			// and capture OTP code
+			// Set 'pendingVerification' to true to display second form and capture OTP code
 			setVerification({
 				...verification,
 				state: 'pending',
 			});
 		} catch (err) {
-			// See https://clerk.com/docs/custom-flows/error-handling
-			// for more info on error handling
-			console.error(JSON.stringify(err, null, 2));
+			Alert.alert(
+				'Error',
+				(err as ClerkError)?.errors?.[0]?.longMessage ||
+					'An error occurred during sign up'
+			);
 		}
 	};
 
-	// Handle submission of verification form
 	const onVerifyPress = async () => {
 		if (!isLoaded) return;
 
@@ -92,7 +97,12 @@ const SignUp = () => {
 		}
 	};
 
+	const handleVerifyModalHide = () => {
+		if (verification.state === 'success') setShowSuccessModal(true);
+	};
+
 	const handleBrowseHome = () => {
+		setShowSuccessModal(false);
 		router.replace('/(root)/(tabs)/home');
 	};
 
@@ -150,7 +160,45 @@ const SignUp = () => {
 					</Link>
 				</View>
 
-				<ReactNativeModal isVisible={verification.state === 'success'}>
+				<ReactNativeModal
+					isVisible={verification.state === 'pending'}
+					onModalHide={handleVerifyModalHide}
+				>
+					<View className='bg-white px-7 py-9 rounded-2xl min-h-[300px]'>
+						<Text className='text-2xl mb-2 font-JakartaExtraBold text-center'>
+							Verification
+						</Text>
+
+						<Text className='font-Jakarta mb-5 text-center'>
+							We've sent a verification code to {form.email}
+						</Text>
+
+						<InputField
+							label='Code'
+							icon={icons.lock}
+							placeholder='12345'
+							value={verification.code}
+							onChangeText={code => setVerification({ ...verification, code })}
+						/>
+
+						{verification.error && (
+							<Text className='text-red-500 text-sm mt-1 font-JakartaSemiBold'>
+								{verification.error}
+							</Text>
+						)}
+
+						<CustomButton
+							title='Verify Email'
+							className='mt-5 bg-success-500'
+							onPress={onVerifyPress}
+						/>
+					</View>
+				</ReactNativeModal>
+
+				<ReactNativeModal
+					isVisible={showSuccessModal}
+					onModalHide={handleBrowseHome}
+				>
 					<View className='bg-white px-7 py-9 rounded-2xl min-h-[300px]'>
 						<Image
 							source={images.check}
