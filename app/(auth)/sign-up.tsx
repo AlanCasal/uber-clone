@@ -1,22 +1,115 @@
+/* eslint-disable no-console */
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
 import OAuth from '@/components/OAuth';
 import { icons, images } from '@/constants';
+import { useSignUp } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
 import { useState } from 'react';
-import { Image, ScrollView, View, Text } from 'react-native';
+import { Image, ScrollView, View, Text, Button, TextInput } from 'react-native';
+
+// Define the Clerk error type
+interface ClerkError extends Error {
+	errors?: Array<{
+		longMessage: string;
+		message?: string;
+		code?: string;
+	}>;
+}
 
 const SignUp = () => {
+	const { isLoaded, signUp, setActive } = useSignUp();
 	const [form, setForm] = useState({
 		name: '',
 		email: '',
 		password: '',
 	});
 
+	const [verification, setVerification] = useState({
+		state: 'default',
+		error: '',
+		code: '',
+	});
+
 	const onSignUpPress = async () => {
-		// eslint-disable-next-line no-console
-		console.log('sign up pressed');
+		if (!isLoaded) return;
+
+		// Start sign-up process using email and password provided
+		try {
+			await signUp.create({
+				emailAddress: form.email,
+				password: form.password,
+			});
+
+			// Send user an email with verification code
+			await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+
+			// Set 'pendingVerification' to true to display second form
+			// and capture OTP code
+			setVerification({
+				...verification,
+				state: 'pending',
+			});
+		} catch (err) {
+			// See https://clerk.com/docs/custom-flows/error-handling
+			// for more info on error handling
+			console.error(JSON.stringify(err, null, 2));
+		}
 	};
+
+	// Handle submission of verification form
+	const onVerifyPress = async () => {
+		if (!isLoaded) return;
+
+		try {
+			// Use the code the user provided to attempt verification
+			const signUpAttempt = await signUp.attemptEmailAddressVerification({
+				code: verification.code,
+			});
+
+			// If verification was completed, set the session to active
+			// and redirect the user
+			if (signUpAttempt.status === 'complete') {
+				// TODO: create user in db
+				await setActive({ session: signUpAttempt.createdSessionId });
+				setVerification({
+					...verification,
+					state: 'success',
+				});
+			} else {
+				setVerification({
+					...verification,
+					state: 'failed',
+					error: 'Verification failed',
+				});
+			}
+		} catch (err) {
+			setVerification({
+				...verification,
+				state: 'failed',
+				error:
+					(err as ClerkError)?.errors?.[0]?.longMessage ||
+					'An error occurred during verification',
+			});
+		}
+	};
+
+	if (pendingVerification) {
+		return (
+			<>
+				<Text>Verify your email</Text>
+				<TextInput
+					value={code}
+					placeholder='Enter your verification code'
+					onChangeText={code => setCode(code)}
+				/>
+				<Button
+					title='Verify'
+					onPress={onVerifyPress}
+				/>
+			</>
+		);
+	}
 
 	return (
 		<ScrollView className='flex-1 bg-white'>
