@@ -44,6 +44,7 @@ const InputField = ({
 							secureTextEntry={secureTextEntry}
 							{...props}
 							placeholderTextColor={'gray'}
+							autoCapitalize='none'
 						/>
 					</View>
 				</View>
