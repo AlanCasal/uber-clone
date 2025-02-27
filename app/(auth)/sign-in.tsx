@@ -1,20 +1,57 @@
+import { useState } from 'react';
+import { Image, ScrollView, View, Text, Alert } from 'react-native';
+import { Link, router } from 'expo-router';
+import { useSignIn } from '@clerk/clerk-expo';
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
 import OAuth from '@/components/OAuth';
 import { icons, images } from '@/constants';
-import { Link } from 'expo-router';
-import { useState } from 'react';
-import { Image, ScrollView, View, Text } from 'react-native';
+
+interface ClerkError extends Error {
+	errors?: Array<{
+		longMessage: string;
+		message?: string;
+		code?: string;
+	}>;
+}
 
 const SignIn = () => {
+	const { signIn, setActive, isLoaded } = useSignIn();
+
 	const [form, setForm] = useState({
 		email: '',
 		password: '',
 	});
 
 	const onSignInPress = async () => {
-		// eslint-disable-next-line no-console
-		console.log('sign in pressed');
+		if (!isLoaded) return;
+
+		try {
+			const signInAttempt = await signIn.create({
+				identifier: form.email,
+				password: form.password,
+			});
+
+			// If sign-in process is complete, set the created session as active and redirect the user
+			if (signInAttempt.status === 'complete') {
+				await setActive({ session: signInAttempt.createdSessionId });
+				router.replace('/(root)/(tabs)/home');
+			} else {
+				// If the status isn't complete, check why. User might need to
+				// complete further steps.
+				Alert.alert(
+					'Error',
+					signInAttempt.status || 'An error occurred during sign up'
+				);
+			}
+		} catch (err) {
+			// See https://clerk.com/docs/custom-flows/error-handling
+			Alert.alert(
+				'Error',
+				(err as ClerkError)?.errors?.[0]?.longMessage ||
+					'An error occurred during sign up'
+			);
+		}
 	};
 
 	return (
@@ -26,7 +63,7 @@ const SignIn = () => {
 						className='z-0 w-full h-[250px]'
 					/>
 					<Text className='text-2xl text-black font-JakartaSemiBold absolute bottom-5 left-5'>
-						Welcome ! 👋🏼
+						Welcome Back! 👋🏼
 					</Text>
 				</View>
 
@@ -63,8 +100,6 @@ const SignIn = () => {
 						<Text className='text-primary-500 font-bold'>Sign Up</Text>
 					</Link>
 				</View>
-
-				{/* Verification Modal */}
 			</View>
 		</ScrollView>
 	);
