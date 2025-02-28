@@ -1,7 +1,15 @@
-import { FlatList } from 'react-native';
+import {
+	ActivityIndicator,
+	FlatList,
+	Image,
+	View,
+	Text,
+	TouchableOpacity,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useUser } from '@clerk/clerk-expo';
 import RideCard from '@/components/RideCard';
+import { icons, images } from '@/constants';
 
 const recentRides = [
 	{
@@ -112,12 +120,61 @@ const recentRides = [
 
 const Page = () => {
 	const { user } = useUser();
+	const loading = false;
+
+	const handleSignOut = () => {
+		// signOut();
+	};
 
 	return (
 		<SafeAreaView className='bg-general-500'>
 			<FlatList
 				data={recentRides}
 				renderItem={({ item }) => <RideCard ride={item} />}
+				ListHeaderComponent={
+					<View className='flex-row justify-between items-center my-5'>
+						<Text className='text-2xl font-JakartaExtraBold'>
+							Welcome{' '}
+							{user?.firstName ||
+								user?.emailAddresses[0].emailAddress.split('@')[0]}{' '}
+							👋🏼
+						</Text>
+
+						<TouchableOpacity
+							onPress={handleSignOut}
+							activeOpacity={0.4}
+							className='justify-center items-center w-10 h-10 rounded-full bg-white'
+						>
+							<Image
+								source={icons.out}
+								className='w-4 h-4'
+								alt='sign out'
+							/>
+						</TouchableOpacity>
+					</View>
+				}
+				ListEmptyComponent={
+					<View className='flex-1 justify-center items-center'>
+						{loading ? (
+							<ActivityIndicator
+								size='large'
+								color='#0286ff'
+							/>
+						) : (
+							<>
+								<Image
+									source={images.noResult}
+									className='w-40 h-40'
+									alt='no recent rides found'
+								/>
+								<Text className='text-sm'>No recent rides found</Text>
+							</>
+						)}
+					</View>
+				}
+				className='mx-5'
+				keyboardShouldPersistTaps='handled'
+				contentContainerStyle={{ paddingBottom: 100 }}
 			/>
 		</SafeAreaView>
 	);
