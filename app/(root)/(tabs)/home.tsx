@@ -159,13 +159,17 @@ const Page = () => {
 
 			const location = await getCurrentPositionAsync();
 			const address = await reverseGeocodeAsync({
-				latitude: location.coords?.latitude,
-				longitude: location.coords?.longitude,
+				// latitude: location.coords?.latitude,
+				// longitude: location.coords?.longitude,
+				latitude: 36.723276,
+				longitude: -4.417405,
 			});
 
 			setUserLocation({
-				latitude: location.coords?.latitude,
-				longitude: location.coords?.longitude,
+				// latitude: location.coords?.latitude,
+				// longitude: location.coords?.longitude,
+				latitude: 36.723276,
+				longitude: -4.417405,
 				address: `${address[0].name}, ${address[0].region}`,
 			});
 
