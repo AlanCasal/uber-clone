@@ -21,6 +21,7 @@ import {
 	reverseGeocodeAsync,
 } from 'expo-location';
 import { malagaLatitude, malagaLongitude } from '@/lib/maps';
+import { router } from 'expo-router';
 
 const recentRides = [
 	{
@@ -143,8 +144,14 @@ const Page = () => {
 		// signOut();
 	};
 
-	const handleDestinationPress = () => {
-		console.log('\x1b[33m\x1b[44m\x1b[1m[destination pressed]\x1b[0m');
+	const handleDestinationPress = (location: {
+		latitude: number;
+		longitude: number;
+		address: string;
+	}) => {
+		setDestinationLocation(location);
+
+		router.push('/(root)/find-ride');
 	};
 
 	const loading = false;

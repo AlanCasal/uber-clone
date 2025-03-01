@@ -22,8 +22,8 @@ const GoogleTextInput = ({
 				placeholder='Where do you want to go?'
 				onPress={(data, details = null) => {
 					handlePress({
-						latitude: details?.geometry.location.lat || 0,
-						longitude: details?.geometry.location.lng || 0,
+						latitude: details?.geometry?.location?.lat || 0,
+						longitude: details?.geometry?.location?.lng || 0,
 						address: data.description,
 					});
 				}}
