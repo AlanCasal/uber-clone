@@ -31,7 +31,7 @@ const InputField = ({
 						{label}
 					</Text>
 					<View
-						className={`flex flex-row justify-start items-center relative bg-neutral-100 rounded-full border border-neutral-100 focus:border-primary-500 ${containerStyle}`}
+						className={`flex-row justify-start items-center bg-neutral-100 rounded-full border border-neutral-100 focus:border-primary-500 ${containerStyle}`}
 					>
 						{icon && (
 							<Image

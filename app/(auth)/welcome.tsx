@@ -16,11 +16,15 @@ const Onboarding = () => {
 		else swiperRef.current?.scrollBy(1);
 	};
 
+	const handleSkip = () => {
+		router.replace('/(auth)/sign-up');
+	};
+
 	return (
-		<SafeAreaView className='flex h-full items-center justify-between bg-white p-5'>
+		<SafeAreaView className='h-full items-center justify-between bg-white p-5'>
 			<TouchableOpacity
-				onPress={() => router.replace('/(auth)/sign-up')}
-				className='w-full flex justify-end items-end'
+				onPress={handleSkip}
+				className='w-full justify-end items-end'
 			>
 				<Text className='text-black text-md font-JakartaBold'>Skip</Text>
 			</TouchableOpacity>
@@ -39,14 +43,14 @@ const Onboarding = () => {
 				{onboarding.map(item => (
 					<View
 						key={item.id}
-						className='flex items-center justify-center'
+						className='items-center justify-center'
 					>
 						<Image
 							source={item.image}
 							className='w-full h-[300px]'
 							resizeMode='contain'
 						/>
-						<View className='flex flex-row items-center justify-center w-full mt-10'>
+						<View className='flex-row items-center justify-center w-full mt-10'>
 							<Text className='text-black text-3xl font-bold mx-10 text-center'>
 								{item.title}
 							</Text>

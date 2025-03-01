@@ -14,6 +14,10 @@ const FindRide = () => {
 		setDestinationLocation,
 	} = useLocationStore();
 
+	const handleFindRide = () => {
+		router.push('/(root)/confirm-ride');
+	};
+
 	return (
 		<RideLayout
 			title='Ride'
@@ -44,7 +48,7 @@ const FindRide = () => {
 			<CustomButton
 				title='Find Ride'
 				className='mt-5'
-				onPress={() => router.push('/(root)/confirm-ride')}
+				onPress={handleFindRide}
 			/>
 		</RideLayout>
 	);

@@ -37,7 +37,7 @@ const RideCard = ({
 					/>
 
 					{/* address info */}
-					<View className='flex-col mx-5 gap-y-5 flex-1'>
+					<View className='mx-5 gap-y-5 flex-1'>
 						<View className='flex-row items-center gap-x-2'>
 							<Image
 								source={icons.to}

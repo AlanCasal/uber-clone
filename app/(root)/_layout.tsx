@@ -15,10 +15,10 @@ const Layout = () => {
 				name='confirm-ride'
 				options={{ headerShown: false }}
 			/>
-			{/* <Stack.Screen
+			<Stack.Screen
 				name='book-ride'
 				options={{ headerShown: false }}
-			/> */}
+			/>
 		</Stack>
 	);
 };

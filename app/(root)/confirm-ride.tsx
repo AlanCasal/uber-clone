@@ -10,6 +10,10 @@ const snapPoints = ['65%', '85%'];
 const ConfirmRide = () => {
 	const { drivers, selectedDriver, setSelectedDriver } = useDriverStore();
 
+	const handleSelectRide = () => {
+		router.push('/(root)/book-ride');
+	};
+
 	return (
 		<RideLayout
 			title='Confirm Ride'
@@ -28,7 +32,7 @@ const ConfirmRide = () => {
 					<View className='mx-5 mt-10'>
 						<CustomButton
 							title='Select Ride'
-							onPress={() => router.push('/(root)/book-ride')}
+							onPress={handleSelectRide}
 						/>
 					</View>
 				)}

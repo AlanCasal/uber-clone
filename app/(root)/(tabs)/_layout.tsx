@@ -10,7 +10,7 @@ const TabIcon = ({
 	source: ImageSourcePropType;
 }) => (
 	<View
-		className={`rounded-full w-12 h-12 items-center justify-center flex flex-row  ${focused ? 'bg-general-300' : ''}`}
+		className={`rounded-full w-12 h-12 items-center justify-center flex-row  ${focused ? 'bg-general-300' : ''}`}
 	>
 		<View
 			className={`rounded-full w-12 h-12 items-center justify-center ${focused ? 'bg-general-400' : ''}`}

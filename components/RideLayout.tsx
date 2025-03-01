@@ -14,12 +14,16 @@ interface RideLayoutProps {
 const RideLayout = ({ title, children, snapPoints }: RideLayoutProps) => {
 	const bottomSheetRef = useRef<BottomSheet>(null);
 
+	const handleGoBack = () => {
+		router.back();
+	};
+
 	return (
 		<GestureHandlerRootView>
 			<View className='flex-1 bg-white'>
-				<View className='flex-col h-screen bg-blue-500'>
+				<View className='h-screen bg-blue-500'>
 					<View className='flex-row absolute z-10 top-16 items-center justify-start px-5'>
-						<TouchableOpacity onPress={() => router.back()}>
+						<TouchableOpacity onPress={handleGoBack}>
 							<View className='w-10 h-10 bg-white rounded-full items-center justify-center'>
 								<Image
 									source={icons.backArrow}

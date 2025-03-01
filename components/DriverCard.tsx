@@ -18,7 +18,7 @@ const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
 				className='w-14 h-14 rounded-full'
 			/>
 
-			<View className='flex-1 flex-col items-start justify-center mx-3'>
+			<View className='flex-1 items-start justify-center mx-3'>
 				<View className='flex-row items-center justify-start mb-1'>
 					<Text className='text-lg font-JakartaRegular'>{item.title}</Text>
 
