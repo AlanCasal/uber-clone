@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native';
 import { useLocationStore } from '@/store';
+import RideLayout from '@/components/RideLayout';
 
 const FindRide = () => {
 	const {
@@ -10,10 +11,11 @@ const FindRide = () => {
 	} = useLocationStore();
 
 	return (
-		<View>
-			<Text className='text-2xl'>You are here: {userAddress}</Text>
-			<Text className='text-2xl'>You are going to: {destinationAddress}</Text>
-		</View>
+		<RideLayout>
+			<View>
+				<Text className='text-2xl'>Find Ride</Text>
+			</View>
+		</RideLayout>
 	);
 };
 
