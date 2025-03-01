@@ -14,12 +14,13 @@ import RideCard from '@/components/RideCard';
 import { icons, images } from '@/constants';
 import GoogleTextInput from '@/components/GoogleTextInput';
 import Map from '@/components/Map';
-import useLocationStore from '@/store';
+import { useLocationStore } from '@/store';
 import {
 	requestForegroundPermissionsAsync,
 	getCurrentPositionAsync,
 	reverseGeocodeAsync,
 } from 'expo-location';
+import { malagaLatitude, malagaLongitude } from '@/lib/maps';
 
 const recentRides = [
 	{
@@ -161,15 +162,15 @@ const Page = () => {
 			const address = await reverseGeocodeAsync({
 				// latitude: location.coords?.latitude,
 				// longitude: location.coords?.longitude,
-				latitude: 36.723276,
-				longitude: -4.417405,
+				latitude: malagaLatitude,
+				longitude: malagaLongitude,
 			});
 
 			setUserLocation({
 				// latitude: location.coords?.latitude,
 				// longitude: location.coords?.longitude,
-				latitude: 36.723276,
-				longitude: -4.417405,
+				latitude: malagaLatitude,
+				longitude: malagaLongitude,
 				address: `${address[0].name}, ${address[0].region}`,
 			});
 

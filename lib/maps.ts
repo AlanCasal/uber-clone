@@ -5,6 +5,9 @@ const directionsAPI = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 const goggleDirectionsUrl =
 	'https://maps.googleapis.com/maps/api/directions/json';
 
+export const malagaLatitude = 36.723276;
+export const malagaLongitude = -4.417405;
+
 export const generateMarkersFromData = ({
 	data,
 	userLatitude,
@@ -41,8 +44,8 @@ export const calculateRegion = ({
 	if (!userLatitude || !userLongitude) {
 		// sets mock data
 		return {
-			latitude: 36.723276,
-			longitude: -4.417405,
+			latitude: malagaLatitude,
+			longitude: malagaLongitude,
 			latitudeDelta: 0.01,
 			longitudeDelta: 0.01,
 		};
