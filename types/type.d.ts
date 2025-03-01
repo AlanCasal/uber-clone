@@ -1,5 +1,8 @@
 import { TextInputProps, TouchableOpacityProps } from 'react-native';
 
+// NativeWind type for className props
+type NativeWindStyleProp = string;
+
 declare interface Driver {
 	driver_id: number;
 	first_name: string;
@@ -59,13 +62,15 @@ declare interface ButtonProps extends TouchableOpacityProps {
 	textVariant?: 'primary' | 'default' | 'secondary' | 'danger' | 'success';
 	IconLeft?: React.ComponentType<any>;
 	IconRight?: React.ComponentType<any>;
-	className?: string;
+	/** NativeWind class names for styling */
+	className?: NativeWindStyleProp;
 }
 
 declare interface GoogleInputProps {
 	icon?: string;
 	initialLocation?: string;
-	containerStyle?: string;
+	/** NativeWind class names for container styling */
+	containerStyle?: NativeWindStyleProp;
 	textInputBackgroundColor?: string;
 	handlePress: ({
 		latitude,
@@ -82,11 +87,16 @@ declare interface InputFieldProps extends TextInputProps {
 	label: string;
 	icon?: any;
 	secureTextEntry?: boolean;
-	labelStyle?: string;
-	containerStyle?: string;
-	inputStyle?: string;
-	iconStyle?: string;
-	className?: string;
+	/** NativeWind class names for label styling */
+	labelStyle?: NativeWindStyleProp;
+	/** NativeWind class names for container styling */
+	containerStyle?: NativeWindStyleProp;
+	/** NativeWind class names for input styling */
+	inputStyle?: NativeWindStyleProp;
+	/** NativeWind class names for icon styling */
+	iconStyle?: NativeWindStyleProp;
+	/** NativeWind class names for component styling */
+	className?: NativeWindStyleProp;
 }
 
 declare interface PaymentProps {
