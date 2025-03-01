@@ -138,7 +138,7 @@ const Page = () => {
 	const { setUserLocation, setDestinationLocation } = useLocationStore();
 	const { user } = useUser();
 
-	const [hasPermissions, setHasPermissions] = useState(false);
+	const [, setHasPermissions] = useState(false);
 
 	const handleSignOut = () => {
 		// signOut();
