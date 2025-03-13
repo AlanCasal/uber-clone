@@ -6,6 +6,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { icons } from '@/constants';
 
 const GOOGLE_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
+const GOOGLE_PLACE_API =
+	'https://maps.googleapis.com/maps/api/place/details/json';
 
 const GoogleTextInput = ({
 	icon,
@@ -14,18 +16,59 @@ const GoogleTextInput = ({
 	textInputBackgroundColor,
 	handlePress,
 }: GoogleInputProps) => {
+	const fetchPlaceDetails = async (placeId: string, description: string) => {
+		try {
+			const response = await fetch(
+				`${GOOGLE_PLACE_API}?place_id=${placeId}&key=${GOOGLE_API_KEY}&fields=geometry`
+			);
+			const data = await response.json();
+
+			if (
+				data.result &&
+				data.result.geometry &&
+				data.result.geometry.location
+			) {
+				handlePress({
+					latitude: data.result.geometry.location.lat,
+					longitude: data.result.geometry.location.lng,
+					address: description,
+				});
+			} else {
+				console.error('Failed to get location coordinates:', data);
+				// Fallback to default coordinates if needed
+				handlePress({
+					latitude: 0,
+					longitude: 0,
+					address: description,
+				});
+			}
+		} catch (error) {
+			console.error('Error fetching place details:', error);
+			// Fallback to default coordinates
+			handlePress({
+				latitude: 0,
+				longitude: 0,
+				address: description,
+			});
+		}
+	};
+
 	return (
 		<View
 			className={`flex-row items-center justify-center z-50 rounded-xl mb-5 ${containerStyle}`}
 		>
 			<GooglePlacesAutocomplete
 				placeholder='Where do you want to go?'
-				onPress={(data, details = null) => {
-					handlePress({
-						latitude: details?.geometry?.location?.lat || 0,
-						longitude: details?.geometry?.location?.lng || 0,
-						address: data.description,
-					});
+				onPress={data => {
+					if (data.place_id) fetchPlaceDetails(data.place_id, data.description);
+					else {
+						// Fallback if place_id is not available
+						handlePress({
+							latitude: 0,
+							longitude: 0,
+							address: data.description,
+						});
+					}
 				}}
 				styles={{
 					textInputContainer: {
