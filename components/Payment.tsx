@@ -1,25 +1,65 @@
+import { fetchAPI } from '@/lib/fetch';
 import CustomButton from './CustomButton';
 import { PaymentSheetError, useStripe } from '@stripe/stripe-react-native';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
+import { PaymentProps } from '@/types/type';
 
-const Payment = () => {
+const Payment = ({
+	fullName,
+	email,
+	amount,
+	driverId,
+	rideTime,
+}: PaymentProps) => {
 	const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
 	const [success, setSuccess] = useState(false);
 
 	const openPaymentSheet = async () => {
+		await initializePaymentSheet();
+
 		const { error } = await presentPaymentSheet();
 
-		if (error) {
+		if (!error) setSuccess(true);
+		else {
 			const errorMessage =
 				error.code === PaymentSheetError.Canceled
 					? 'Payment canceled'
 					: error.message;
 
 			Alert.alert('Error', errorMessage);
-		} else {
-			setSuccess(true);
+		}
+	};
+
+	const confirmHandler = async (paymentMethod, _, intentCreationCallback) => {
+		const { paymentIntent, customer } = await fetchAPI(
+			'(api)/(stripe)/create',
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: fullName || email.split('@')[0],
+					email,
+					amount,
+					paymentMethod: paymentMethod.id,
+				}),
+			}
+		);
+
+		if (paymentIntent.client_secret) {
+			const { result } = await fetchAPI('(api)/(stripe)/pay', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					payment_method_id: paymentMethod.id,
+					payment_intent_id: paymentIntent.id,
+					customer_id: customer,
+				}),
+			});
+
+			if (result.client_secret) {
+			}
 		}
 	};
 
@@ -31,7 +71,7 @@ const Payment = () => {
 					amount: 1099,
 					currencyCode: 'USD',
 				},
-				confirmHandler: confirmHandler,
+				confirmHandler,
 			},
 		});
 		if (error) {
@@ -39,20 +79,9 @@ const Payment = () => {
 		}
 	};
 
-	const confirmHandler = async (
-		paymentMethod,
-		shouldSavePaymentMethod,
-		intentCreationCallback
-	) => {
-		// explained later
-	};
-
-	const didTapCheckoutButton = async () => {
-		// implement later
-	};
-
 	useEffect(() => {
 		initializePaymentSheet();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
