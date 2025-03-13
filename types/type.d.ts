@@ -100,11 +100,11 @@ declare interface InputFieldProps extends TextInputProps {
 }
 
 declare interface PaymentProps {
-	fullName: string;
-	email: string;
-	amount: string;
-	driverId: number;
-	rideTime: number;
+	fullName: string | null | undefined;
+	email: string | null | undefined;
+	amount: string | null | undefined;
+	driverId: number | null | undefined;
+	rideTime: number | null | undefined;
 }
 
 declare interface LocationStore {
