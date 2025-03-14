@@ -11,9 +11,12 @@ import { Driver, MarkerData } from '@/types/type';
 import { icons } from '@/constants';
 import { useFetch } from '@/lib/fetch';
 import { View, ActivityIndicator, Text } from 'react-native';
+import MapViewDirections from 'react-native-maps-directions';
 
 // Create a styled version of MapView
 const StyledMapView = cssInterop(MapView, { className: 'style' });
+
+const GOOGLE_API_KEY = `${process.env.EXPO_PUBLIC_GOOGLE_API_KEY}`;
 
 const Map = () => {
 	const { data: drivers, loading, error } = useFetch<Driver[]>('/(api)/driver');
@@ -120,15 +123,31 @@ const Map = () => {
 			))}
 
 			{destinationLatitude && destinationLongitude && (
-				<Marker
-					key='destination'
-					coordinate={{
-						latitude: destinationLatitude,
-						longitude: destinationLongitude,
-					}}
-					title='Destination'
-					image={icons.pin}
-				/>
+				<>
+					<Marker
+						key='destination'
+						coordinate={{
+							latitude: destinationLatitude,
+							longitude: destinationLongitude,
+						}}
+						title='Destination'
+						image={icons.pin}
+					/>
+
+					<MapViewDirections
+						origin={{
+							latitude: userLatitude,
+							longitude: userLongitude,
+						}}
+						destination={{
+							latitude: destinationLatitude,
+							longitude: destinationLongitude,
+						}}
+						strokeWidth={5}
+						strokeColor='#0286ff'
+						apikey={GOOGLE_API_KEY}
+					/>
+				</>
 			)}
 		</StyledMapView>
 	);
