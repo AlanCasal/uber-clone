@@ -17,6 +17,7 @@ const Payment = ({
 	driverId,
 	rideTime,
 }: PaymentProps) => {
+	const { userId } = useAuth();
 	const { initPaymentSheet, presentPaymentSheet } = useStripe();
 	const {
 		userAddress,
@@ -26,7 +27,6 @@ const Payment = ({
 		destinationLatitude,
 		destinationLongitude,
 	} = useLocationStore();
-	const { userId } = useAuth();
 
 	const [success, setSuccess] = useState(false);
 
@@ -91,7 +91,7 @@ const Payment = ({
 									destination_address: destinationAddress,
 									destination_latitude: destinationLatitude,
 									destination_longitude: destinationLongitude,
-									ride_time: rideTime,
+									ride_time: rideTime?.toFixed(0),
 									fare_price: parseInt(amount!) * 100,
 									payment_status: 'paid',
 									driver_id: driverId,
