@@ -48,8 +48,7 @@ const Map = () => {
 
 			setMarkers(newMarkers);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [drivers]);
+	}, [drivers, userLatitude, userLongitude]);
 
 	useEffect(() => {
 		if (
@@ -119,6 +118,18 @@ const Map = () => {
 					}
 				/>
 			))}
+
+			{destinationLatitude && destinationLongitude && (
+				<Marker
+					key='destination'
+					coordinate={{
+						latitude: destinationLatitude,
+						longitude: destinationLongitude,
+					}}
+					title='Destination'
+					image={icons.pin}
+				/>
+			)}
 		</StyledMapView>
 	);
 };
