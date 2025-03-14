@@ -12,10 +12,8 @@ const OAuth = () => {
 		try {
 			const result = await googleOauth(startSSOFlow);
 
-			if (result.code === 'session_exists') {
-				Alert.alert('Success', 'Session Exists. Redirecting to Home Page.');
+			if (result.code === 'session_exists' || result.code === 'success')
 				router.replace('/(root)/(tabs)/home');
-			}
 		} catch (error) {
 			console.log('\x1b[33m\x1b[41m\x1b[1m[error]\x1b[0m', error);
 
