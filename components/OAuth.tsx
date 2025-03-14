@@ -1,11 +1,26 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert } from 'react-native';
 import CustomButton from './CustomButton';
 import { icons } from '@/constants';
+import { useSSO } from '@clerk/clerk-expo';
+import { ClerkError, googleOauth } from '@/lib/auth';
+import { router } from 'expo-router';
 
 const OAuth = () => {
-	const handleGoogleSignIn = () => {
-		// eslint-disable-next-line no-console
-		console.log('google login');
+	const { startSSOFlow } = useSSO();
+
+	const handleGoogleSignIn = async () => {
+		try {
+			const result = await googleOauth(startSSOFlow);
+
+			if (result.code === 'session_exists') {
+				Alert.alert('Success', 'Session Exists. Redirecting to Home Page.');
+				router.replace('/(root)/(tabs)/home');
+			}
+		} catch (error) {
+			console.log('\x1b[33m\x1b[41m\x1b[1m[error]\x1b[0m', error);
+
+			Alert.alert('Error', (error as ClerkError).errors?.[0].longMessage);
+		}
 	};
 
 	return (
