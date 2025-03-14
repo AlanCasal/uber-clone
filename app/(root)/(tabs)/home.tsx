@@ -9,7 +9,7 @@ import {
 	Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useUser } from '@clerk/clerk-expo';
+import { useAuth, useUser } from '@clerk/clerk-expo';
 import RideCard from '@/components/RideCard';
 import { icons, images } from '@/constants';
 import GoogleTextInput from '@/components/GoogleTextInput';
@@ -28,6 +28,7 @@ import { Ride } from '@/types/type';
 const Page = () => {
 	const { setUserLocation, setDestinationLocation } = useLocationStore();
 	const { user } = useUser();
+	const { signOut } = useAuth();
 	const { data: recentRides, loading } = useFetch<Ride[]>(
 		`/(api)/ride/${user?.id}`
 	);
@@ -35,7 +36,9 @@ const Page = () => {
 	const [, setHasPermissions] = useState(false);
 
 	const handleSignOut = () => {
-		// signOut();
+		signOut();
+
+		router.replace('/(auth)/sign-in');
 	};
 
 	const handleDestinationPress = (location: {
