@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Stripe } from 'stripe';
 
-// const stripe = new Stripe(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const STRIPE_SECRET_KEY = `${process.env.STRIPE_SECRET_KEY}`;
+const stripe = new Stripe(STRIPE_SECRET_KEY);
 
 export async function POST(req: Request) {
 	try {
@@ -22,9 +22,7 @@ export async function POST(req: Request) {
 
 		const paymentMethod = await stripe.paymentMethods.attach(
 			payment_method_id,
-			{
-				customer: customer_id,
-			}
+			{ customer: customer_id }
 		);
 
 		const result = await stripe.paymentIntents.confirm(payment_intent_id, {
